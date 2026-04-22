@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🎂 Selamat Ulang Tahun! 🎀</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none; /* biar lebih rapi, tidak memilih teks */
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #ffe6f0 0%, #ffc0d5 100%);
+            font-family: 'Quicksand', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="27" viewBox="0 0 24 27"><polygon points="12,2 15,10 23,10 16.5,15 19,23 12,18.5 5,23 7.5,15 1,10 9,10" fill="%23ff66b2" stroke="%23fff" stroke-width="1"/></svg>') 12 5, auto;
+        }
+
+        /* balon-balon kecil animasi */
+        .balloon {
+            position: absolute;
+            bottom: -100px;
+            width: 50px;
+            height: 65px;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,240,0.9), #ff99bb);
+            border-radius: 50% 50% 50% 50%;
+            box-shadow: -3px 5px 10px rgba(0,0,0,0.1);
+            animation: fly 12s infinite ease-in;
+            z-index: 0;
+            opacity: 0.7;
+        }
+        .balloon::after {
+            content: "✧";
+            position: absolute;
+            bottom: -18px;
+            left: 22px;
+            font-size: 14px;
+            color: #d44c7a;
+            transform: rotate(45deg);
+        }
+        .balloon::before {
+            content: "";
+            position: absolute;
+            width: 1px;
+            height: 35px;
+            background: #b3476b;
+            bottom: -32px;
+            left: 25px;
+        }
+        @keyframes fly {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-120vh) translateX(40px) rotate(15deg);
+                opacity: 0;
+            }
+        }
+
+        /* main card */
+        .birthday-card {
+            background: rgba(255, 245, 250, 0.95);
+            backdrop-filter: blur(2px);
+            border-radius: 60px 60px 80px 80px;
+            max-width: 550px;
+            width: 100%;
+            padding: 2rem 2rem 3rem;
+            text-align: center;
+            box-shadow: 0 25px 45px rgba(230, 100, 140, 0.3), 0 8px 18px rgba(0,0,0,0.1);
+            border: 2px solid #ffb7cf;
+            transition: transform 0.3s ease;
+            z-index: 10;
+            position: relative;
+        }
+        .birthday-card:hover {
+            transform: scale(1.01);
+        }
+
+        /* stiker kue */
+        .cake-emoji {
+            font-size: 80px;
+            filter: drop-shadow(2px 8px 12px #ff99aa);
+            margin: 10px 0 5px;
+            animation: bounce 2s infinite ease;
+        }
+        @keyframes bounce {
+            0%,100%{ transform: translateY(0); }
+            50%{ transform: translateY(-12px); }
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            background: linear-gradient(135deg, #e84393, #ff6b9d);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin: 12px 0 8px;
+            letter-spacing: 2px;
+        }
+
+        .nama-teman {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #e84393;
+            background: #fff0f5;
+            display: inline-block;
+            padding: 5px 20px;
+            border-radius: 60px;
+            margin: 10px 0;
+            box-shadow: inset 0 -1px 0 #ffbfd5, 0 5px 12px #ffbfd5;
+        }
+
+        .pesan-ucapan {
+            font-size: 1.2rem;
+            background: #ffeef4;
+            padding: 15px 18px;
+            border-radius: 40px;
+            margin: 20px 0;
+            color: #a13e5f;
+            font-weight: 500;
+            line-height: 1.45;
+            border-left: 5px solid #ff88b0;
+            border-right: 5px solid #ff88b0;
+        }
+
+        /* tombol kejutan */
+        .btn-kejutan {
+            background: linear-gradient(95deg, #ff8db3, #ff6f9e);
+            border: none;
+            color: white;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 12px 28px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 14px #e87ea1;
+            transition: 0.2s;
+            margin: 20px 0 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .btn-kejutan:active {
+            transform: scale(0.96);
+            box-shadow: 0 4px 8px #e87ea1;
+        }
+
+        /* efek confetti container */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* kotak wishlist / harapan */
+        .harapan {
+            margin-top: 30px;
+            background: #fff0f8;
+            border-radius: 48px;
+            padding: 15px;
+            font-size: 0.9rem;
+            color: #ad557a;
+            border: 1px dashed #ff99c2;
+        }
+        .harapan p {
+            margin: 6px 0;
+            font-weight: 600;
+        }
+        .flower-icon {
+            font-size: 1.2rem;
+            display: inline-block;
+            animation: spinFlower 3s infinite linear;
+        }
+        @keyframes spinFlower {
+            0% { transform: rotate(0deg);}
+            100% { transform: rotate(360deg);}
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 480px) {
+            .birthday-card {
+                padding: 1.5rem;
+            }
+            h1 { font-size: 2.3rem; }
+            .nama-teman { font-size: 1.5rem; }
+            .pesan-ucapan { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- balon latar belakang (dibuat dengan js tapi lebih mudah static via js generate) -->
+<div id="balloon-container" style="position:fixed; top:0; left:0; width:100%; height:100%; overflow:hidden; pointer-events:none; z-index:0;"></div>
+
+<canvas id="confetti-canvas"></canvas>
+
+<div class="birthday-card">
+    <div class="cake-emoji">🎂🎈✨</div>
+    <h1>Happy Birthday</h1>
+    <div class="nama-teman" id="namaTeman">🌸 AFIFAH 🌸</div>
+    
+    <div class="pesan-ucapan">
+        💖 Semoga hari ini penuh tawa, cinta, dan kebahagiaan! <br>
+        lu perempuan hebat yang selalu menerangi hari-hari kita berdua 🌟 <br>
+        Semoga mimpi-mimpi lu menjadi kenyataan dan umur lu berkah! 🎀
+    </div>
+    
+    <button class="btn-kejutan" id="kejutanBtn">🎁 Klik untuk Kejutan 🎁</button>
+    
+    <div class="harapan">
+        <p>🌸 <span class="flower-icon">🌼</span>  WISH FOR YOU  <span class="flower-icon">🌻</span></p>
+        <p>✨ Selalu sehat, makin beruntung ✨</p>
+        <p>💕 Dikelilingi orang-orang yang menyayangi lu 💕</p>
+        <p>🎵 Semoga setiap langkah lu diiringi kebahagiaan 🎵</p>
+    </div>
+    <footer>💗 dari teman yang selalu mendukunglu 💗</footer>
+</div>
+
+<script>
+    // === BALON DINAMIS ===
+    function createBalloon() {
+        const container = document.getElementById('balloon-container');
+        if (!container) return;
+        const balloon = document.createElement('div');
+        balloon.classList.add('balloon');
+        
+        // variasi ukuran & warna
+        const size = Math.floor(Math.random() * 40) + 40; // 40px - 80px
+        const colors = ['#FFB7C5', '#FF9EBB', '#FFC0D0', '#FFB3D9', '#FCA6C9', '#FF99BB', '#FFD0E0', '#F9A8D4'];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        balloon.style.width = size + 'px';
+        balloon.style.height = size * 1.25 + 'px';
+        balloon.style.background = `radial-gradient(circle at 30% 30%, #fff5f9, ${randomColor})`;
+        balloon.style.left = Math.random() * 100 + '%';
+        balloon.style.animationDuration = Math.random() * 6 + 8 + 's'; // 8-14 detik
+        balloon.style.animationDelay = Math.random() * 8 + 's';
+        container.appendChild(balloon);
+        
+        // hapus setelah animasi selesai
+        balloon.addEventListener('animationend', () => {
+            balloon.remove();
+        });
+    }
+    
+    // menghasilkan balon setiap 0.7 detik, max 30 balon di background
+    let balloonInterval;
+    function startBalloons() {
+        if(balloonInterval) clearInterval(balloonInterval);
+        balloonInterval = setInterval(() => {
+            const existing = document.querySelectorAll('.balloon').length;
+            if(existing < 25) createBalloon();
+        }, 700);
+    }
+    startBalloons();
+    
+    // === CONFETTI MODERN (menggunakan canvas) ===
+    const canvas = document.getElementById('confetti-canvas');
+    let ctx = canvas.getContext('2d');
+    let animationId = null;
+    let particles = [];
+    let confettiActive = false;
+    
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    
+    class ConfettiParticle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height - canvas.height;
+            this.size = Math.random() * 8 + 4;
+            this.speedY = Math.random() * 5 + 3;
+            this.speedX = Math.random() * 2 - 1;
+            this.color = `hsl(${Math.random() * 360}, 80%, 65%)`;
+            this.rotation = Math.random() * 360;
+            this.rotSpeed = (Math.random() - 0.5) * 10;
+        }
+        update() {
+            this.y += this.speedY;
+            this.x += this.speedX;
+            this.rotation += this.rotSpeed;
+            if (this.y > canvas.height + 50 || this.x < -50 || this.x > canvas.width + 50) {
+                return false;
+            }
+            return true;
+        }
+        draw(ctx) {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.rotate(this.rotation * Math.PI / 180);
+            ctx.fillStyle = this.color;
+            ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size/1.5);
+            ctx.restore();
+        }
+    }
+    
+    function startConfetti(duration = 2800) {
+        if(confettiActive) return;
+        confettiActive = true;
+        particles = [];
+        // isi 180 partikel
+        for(let i = 0; i < 190; i++) {
+            particles.push(new ConfettiParticle());
+        }
+        resizeCanvas();
+        function animateConfetti() {
+            if(!confettiActive) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let allAlive = false;
+            for(let i=0; i<particles.length; i++) {
+                const alive = particles[i].update();
+                particles[i].draw(ctx);
+                if(alive) allAlive = true;
+            }
+            if(allAlive) {
+                animationId = requestAnimationFrame(animateConfetti);
+            } else {
+                stopConfetti();
+            }
+        }
+        if(animationId) cancelAnimationFrame(animationId);
+        animateConfetti();
+        
+        setTimeout(() => {
+            if(confettiActive) {
+                stopConfetti();
+            }
+        }, duration);
+    }
+    
+    function stopConfetti() {
+        if(animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confettiActive = false;
+        particles = [];
+    }
+    
+    // === KARTU UCAPAN DENGAN NAMA (bisa diganti sesuai keinginan) ===
+    // bisa pake prompt untuk personalisasi tapi lebih baik biar bisa diedit manual atau tetap cute
+    // kita beri fitur ganti nama lewat tombol tersembunyi? tapi tidak perlu ribet, biarkan nama standar "AFIFAH"
+    // tapi karena temen perempuan, kita kasih opsi klik pada nama untuk ubah (opsional)
+    const namaSpan = document.getElementById('namaTeman');
+    namaSpan.addEventListener('dblclick', () => {
+        let newName = prompt("Masukkan nama temanmu:", "AFIFAH");
+        if(newName && newName.trim() !== "") {
+            namaSpan.innerHTML = `✨ ${newName.trim()} ✨`;
+            // sekalian efek kecil
+            triggerMiniSpark();
+        } else if(newName === "") {
+            namaSpan.innerHTML = `🌸 Bestie 🌸`;
+        }
+    });
+    
+    function triggerMiniSpark() {
+        // efek sparkling kecil di card
+        const card = document.querySelector('.birthday-card');
+        card.style.transform = 'scale(1.02)';
+        setTimeout(() => { card.style.transform = ''; }, 200);
+        // buat floating hati kecil
+        for(let i=0;i<8;i++) {
+            let heart = document.createElement('div');
+            heart.innerHTML = '💖';
+            heart.style.position = 'fixed';
+            heart.style.left = (Math.random() * window.innerWidth) + 'px';
+            heart.style.top = (window.innerHeight - 50) + 'px';
+            heart.style.fontSize = (Math.random() * 20 + 12) + 'px';
+            heart.style.pointerEvents = 'none';
+            heart.style.zIndex = '1000';
+            heart.style.opacity = '0.9';
+            heart.style.transition = 'all 1s ease-out';
+            document.body.appendChild(heart);
+            setTimeout(() => {
+                heart.style.transform = `translateY(-${Math.random() * 200 + 100}px) translateX(${Math.random() * 100 - 50}px)`;
+                heart.style.opacity = '0';
+            }, 10);
+            setTimeout(() => heart.remove(), 1200);
+        }
+    }
+    
+    // === TOMBOL KEJUTAN ===
+    const kejutanBtn = document.getElementById('kejutanBtn');
+    kejutanBtn.addEventListener('click', () => {
+        // 1. Confetti meriah
+        startConfetti(3500);
+        // 2. Tambahan balon baru yang lebih cepat (semburan balon)
+        for(let i=0;i<18;i++) {
+            setTimeout(() => createBalloon(), i * 70);
+        }
+        // 3. Ubah sementara pesan jadi lebih personal
+        const pesanDiv = document.querySelector('.pesan-ucapan');
+        const originalMsg = pesanDiv.innerHTML;
+        const wishList = [
+            "🎉 HAPPY BIRTHDAY TO THE MOST AMAZING GIRL! 🎉",
+            "✨ Semoga tahun ini penuh pencapaian gemilang dan cinta ✨",
+            "🌸 Lu adalah teman baik 🌸",
+            "🎂 Nikmati hari spesial lu! Makan kue sebanyak-banyaknya! 🎂",
+            "💖 Selalu jadi dirilu sendiri, karena lu luar biasa! 💖"
+        ];
+        const randomWish = wishList[Math.floor(Math.random() * wishList.length)];
+        pesanDiv.innerHTML = `🎀✨ ${randomWish} ✨🎀`;
+        // kembalikan setelah 3.5 detik
+        setTimeout(() => {
+            pesanDiv.innerHTML = originalMsg;
+        }, 3800);
+        
+        // 4. efek getar card kecil (haptic friendly)
+        const card = document.querySelector('.birthday-card');
+        card.style.animation = 'shake 0.4s ease-in-out';
+        setTimeout(() => { card.style.animation = ''; }, 400);
+        
+        // 5. munculkan ucapan "selamat" di console (cuma fun)
+        console.log("%c🎂 SELAMAT ULANG TAHUN!! 🎂", "color: #ff66aa; font-size: 18px; font-weight: bold;");
+        console.log("%cSemoga bahagia selalu!", "color: #ff88bb;");
+        
+        // 6. play sedikit suara? tidak wajib, biar tanpa autoplay, tapi kita tambah efek visual
+        // membuat partikel bintang di sekitar tombol
+        for(let s=0; s<30; s++) {
+            let star = document.createElement('div');
+            star.innerHTML = ['✨','⭐','🌟','💖','🌸','🎈','🎀'][Math.floor(Math.random()*7)];
+            star.style.position = 'fixed';
+            star.style.left = (kejutanBtn.getBoundingClientRect().left + (Math.random() * kejutanBtn.offsetWidth)) + 'px';
+            star.style.top = (kejutanBtn.getBoundingClientRect().top + (Math.random() * kejutanBtn.offsetHeight)) + 'px';
+            star.style.fontSize = (Math.random() * 20 + 12) + 'px';
+            star.style.pointerEvents = 'none';
+            star.style.zIndex = '1001';
+            star.style.transition = 'all 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
+            star.style.opacity = '1';
+            document.body.appendChild(star);
+            setTimeout(() => {
+                star.style.transform = `translate(${Math.random() * 200 - 100}px, ${Math.random() * -150 - 50}px) rotate(${Math.random() * 360}deg)`;
+                star.style.opacity = '0';
+            }, 10);
+            setTimeout(() => star.remove(), 900);
+        }
+    });
+    
+    // fungsi shake
+    const styleShake = document.createElement('style');
+    styleShake.textContent = `
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0.5deg); }
+            20% { transform: translate(-1px, -2px) rotate(-0.5deg); }
+            40% { transform: translate(-3px, 0px) rotate(0.8deg); }
+            60% { transform: translate(3px, 1px) rotate(0deg); }
+            80% { transform: translate(1px, -1px) rotate(0.5deg); }
+            100% { transform: translate(0,0) rotate(0); }
+        }
+    `;
+    document.head.appendChild(styleShake);
+    
+    // === INISIALISASI EFEK KETIK / LOAD ===
+    window.addEventListener('load', () => {
+        resizeCanvas();
+        // sapa kecil dengan balon tambahan
+        for(let i=0;i<6;i++) {
+            setTimeout(() => createBalloon(), i*150);
+        }
+        // tooltip sederhana pada nama
+        namaSpan.title = "Klik dua kali untuk ganti nama!";
+    });
+    
+    // ubah sedikit floating hati setiap 6 detik (background love)
+    setInterval(() => {
+        if(Math.random() > 0.6) {
+            let heartFloat = document.createElement('div');
+            heartFloat.innerHTML = '💗';
+            heartFloat.style.position = 'fixed';
+            heartFloat.style.left = Math.random() * window.innerWidth + 'px';
+            heartFloat.style.bottom = '-20px';
+            heartFloat.style.fontSize = (Math.random() * 18 + 14) + 'px';
+            heartFloat.style.opacity = '0.6';
+            heartFloat.style.pointerEvents = 'none';
+            heartFloat.style.zIndex = '5';
+            heartFloat.style.transition = 'all 7s linear';
+            document.body.appendChild(heartFloat);
+            setTimeout(() => {
+                heartFloat.style.transform = 'translateY(-100vh) rotate(15deg)';
+                heartFloat.style.opacity = '0';
+            }, 30);
+            setTimeout(() => heartFloat.remove(), 7200);
+        }
+    }, 1800);
+    
+    // cegah konflik balon dengan interaksi
+    document.querySelectorAll('.birthday-card, button').forEach(el => {
+        el.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    });
+    
+    // Hiasan hari ini: tulisan live date
+    const today = new Date();
+    const option = { day: 'numeric', month: 'long', year: 'numeric' };
+    const footerSpan = document.querySelector('footer');
+    if(footerSpan) {
+        const dateStr = today.toLocaleDateString('id-ID', option);
+        footerSpan.innerHTML = `💗 ${dateStr} · Untuk lu temen terbaik 💗`;
+    }
+    
+    // bonus: responsive balon saat resize
+    window.addEventListener('resize', () => {
+        // tidak perlu reset balon, hanya canvas diresize
+    });
+    
+    // Hentikan balon berlebih jika tab tidak terlihat? tapi tidak masalah
+</script>
+</body>
+</html>
